@@ -5,6 +5,7 @@
         <f7-col>
           <div
             class="elevation-demo elevation-10 elevation-hover-24 elevation-pressed-12 elevation-transition"
+            @click="StartShopping"
           >
             START SHOPPING
           </div>
@@ -14,7 +15,27 @@
   </f7-page>
 </template>
 
+<script>
+import { mapState, mapGetters } from "vuex";
+export default {
+  methods: {
+    StartShopping() {
+      console.log(this.totalCost);
+      if (window.cordova) {
+      }
+    }
+  },
+  computed: {
+    ...mapState(["items"]),
+    ...mapGetters(["totalCost"])
+  }
+};
+</script>
+
 <style scoped>
+.page {
+  background: lightgray;
+}
 .image-container {
   margin-top: 30vh;
   display: flex;
@@ -32,10 +53,10 @@
   border-radius: 10px;
   background: black;
   font-family: "TheBigWords";
-  color: #13ffcc;
+  color: #ffffff;
   font-size: 30px;
   text-align: center;
   line-height: 100px;
-  text-shadow: 1px 1px #ffffff;
+  text-shadow: 1px 1px #13ffcc;
 }
 </style>
