@@ -13,11 +13,14 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "cordova-android": "^8.0.0",
+    "cordova-android": "^7.1.4",
     "cordova-ios": "^5.0.1",
+    "cordova-play-services-version-adapter": "^1.0.2",
     "cordova-plugin-keyboard": "^1.2.0",
+    "cordova-plugin-qr-barcode-scanner": "^8.0.3",
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-statusbar": "^2.4.3",
+    "cordova-plugin-whitelist": "1",
     "cordova-plugin-wkwebview-engine": "^1.2.1",
     "cordova-plugin-wkwebview-file-xhr": "^2.1.1"
   },
@@ -27,7 +30,11 @@
       "cordova-plugin-keyboard": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-wkwebview-file-xhr": {},
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-qr-barcode-scanner": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "cordova-play-services-version-adapter": {}
     },
     "platforms": [
       "ios",
