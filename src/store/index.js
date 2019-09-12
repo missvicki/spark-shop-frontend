@@ -25,7 +25,7 @@ export default new Vuex.Store({
     },
 
     removeFromCart(state, code) {
-      const itemIndex = state.items.findIndex(item => item.code === code);
+      const itemIndex = state.cart.findIndex(item => item.code === code);
       state.cart.splice(itemIndex, 1);
     }
   },

@@ -13,7 +13,7 @@
     <div v-if="!showShopBtn">
       <div class="list media-list">
         <ul>
-          <li v-for="(item, index) in items" :key="index">
+          <li v-for="(item, index) in cart" :key="index">
             <a href="#" class="item-link item-content">
               <div class="item-media">
                 <img :src="`${require('../images/cart.png')}`" width="80" />
@@ -24,7 +24,10 @@
                   <div class="item-after">{{ item.price | AddUGX }}</div>
                 </div>
                 <div class="item-subtitle">
-                  <button class="col button button-fill button-small">Remove</button>
+                  <button
+                    class="col button button-fill button-small"
+                    @click="removeItem(item.code)"
+                  >Remove</button>
                 </div>
               </div>
             </a>
@@ -69,7 +72,7 @@
       <f7-block-title medium class="margin-top">Your order:</f7-block-title>
       <div class="list no-hairlines">
         <ul>
-          <li class="item-content" v-for="(item, index) in items" :key="index">
+          <li class="item-content" v-for="(item, index) in cart" :key="index">
             <div class="item-inner">
               <div class="item-title">{{ item.name }}</div>
               <div class="item-after text-color-black">
@@ -87,49 +90,56 @@
 import { mapState, mapGetters } from "vuex";
 export default {
   data: () => ({
-    showShopBtn: true
+    showShopBtn: true,
+    scannerOptions: {
+      preferFrontCamera: false,
+      showFlipCameraButton: true,
+      showTorchButton: true,
+      torchOn: true,
+      saveHistory: false,
+      prompt: "Place the QRcode inside the scan area",
+      resultDisplayDuration: 500,
+      formats: "QR_CODE,PDF_417",
+      orientation: "portrait",
+      disableAnimations: true,
+      disableSuccessBeep: false
+    }
   }),
   methods: {
     StartShopping() {
       const self = this;
       if (window.cordova) {
         cordova.plugins.barcodeScanner.scan(
-          function(result) {
-            self.$f7.dialog.alert(
-              "We got a barcode\n" +
-                "Result: " +
-                result.text +
-                "\n" +
-                "Format: " +
-                result.format +
-                "\n" +
-                "Cancelled: " +
-                result.cancelled
-            );
+          result => {
+            const { text: code } = result;
+            self.$store.dispatch("addToCart", code);
+
+            if (self.showShopBtn) self.showShopBtn = false;
           },
-          function(error) {
+          error => {
             self.$f7.dialog.alert("Scanning failed: " + error);
           },
-          {
-            preferFrontCamera: false, // iOS and Android
-            showFlipCameraButton: true, // iOS and Android
-            showTorchButton: true, // iOS and Android
-            torchOn: true, // Android, launch with the torch switched on (if available)
-            saveHistory: false, // Android, save scan history (default false)
-            prompt: "Place a barcode inside the scan area", // Android
-            resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-            formats: "QR_CODE,PDF_417", // default: all but PDF_417 and RSS_EXPANDED
-            orientation: "portrait", // Android only (portrait|landscape), default unset so it rotates with the device
-            disableAnimations: true, // iOS
-            disableSuccessBeep: false // iOS and Android
-          }
+          { ...self.scannerOptions }
         );
       }
     },
-    MakePayment() {}
+
+    removeItem(code) {
+      const self = this;
+      self.$store.dispatch("removeFromCart", code);
+      if (self.cart.length < 1) self.showShopBtn = true;
+    },
+
+    MakePayment() {
+      const self = this;
+      const app = self.$f7;
+      app.dialog.prompt("Enter Number To Charge", number => {
+        app.dialog.alert("Call The API to charge: ", number);
+      });
+    }
   },
   computed: {
-    ...mapState(["cart", "items"]),
+    ...mapState(["cart"]),
     ...mapGetters(["totalCost"])
   }
 };
