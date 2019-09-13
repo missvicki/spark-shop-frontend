@@ -11,11 +11,11 @@ export default new Vuex.Store({
 
   state: {
     items: [
-      { name: "Item 1", code: "334XDF", price: 4000 },
-      { name: "Item 2", code: "434DEZ", price: 8000 },
-      { name: "Item 3", code: "434ABD", price: 6000 }
+      { name: "Fanta Soda (500ml)", code: "334XDF", price: 1000 },
+      { name: "Ice Cream", code: "434DEZ", price: 1000 },
+      { name: "Note Book", code: "434ABD", price: 1000 }
     ],
-    cart: []
+    cart: [{ name: "Note Book", code: "434ABD", price: 1000 }]
   },
 
   mutations: {

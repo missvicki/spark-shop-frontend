@@ -90,7 +90,7 @@
 import { mapState, mapGetters } from "vuex";
 export default {
   data: () => ({
-    showShopBtn: true,
+    showShopBtn: false,
     scannerOptions: {
       preferFrontCamera: false,
       showFlipCameraButton: true,
@@ -133,8 +133,31 @@ export default {
     MakePayment() {
       const self = this;
       const app = self.$f7;
-      app.dialog.prompt("Enter Number To Charge", number => {
-        app.dialog.alert("Call The API to charge: ", number);
+      const $router = self.$f7router;
+
+      app.dialog.prompt("Enter Number To Charge", async phone_number => {
+        const PAYMENTS_ENDPOINT =
+          "https://alphadoctorsltd.com/admin/api/v2/index.php/hackathon-pay-initiator";
+
+        app.preloader.show();
+
+        const response = await app.request.promise.get(PAYMENTS_ENDPOINT, {
+          amount_paid: self.totalCost,
+          phone_number
+        });
+
+        app.preloader.hide();
+
+        const data = JSON.parse(response);
+
+        if (data.status === "success") {
+          $router.navigate({ name: "payment-checker" });
+        } else {
+          app.dialog.alert(
+            "We couldn't initiate the payment request",
+            "Payment Failed"
+          );
+        }
       });
     }
   },
