@@ -38,7 +38,7 @@ export default {
     const checkInterval = setInterval(() => {
       app.request.promise.get(PAYMENT_CHECKER).then(response => {
         const data = JSON.parse(response);
-        
+
         if (data.status === "successful") {
           notificationFull.open();
 
@@ -47,7 +47,6 @@ export default {
           );
 
           clearInterval(checkInterval);
-
           $router.navigate({ name: "dashboard" });
         }
       });

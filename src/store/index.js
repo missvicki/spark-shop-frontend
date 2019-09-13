@@ -15,7 +15,7 @@ export default new Vuex.Store({
       { name: "Ice Cream", code: "434DEZ", price: 1000 },
       { name: "Note Book", code: "434ABD", price: 1000 }
     ],
-    cart: [{ name: "Note Book", code: "434ABD", price: 1000 }]
+    cart: []
   },
 
   mutations: {

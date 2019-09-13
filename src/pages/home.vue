@@ -1,6 +1,6 @@
 <template>
   <f7-page name="home">
-    <div v-if="showShopBtn" class="image-container">
+    <div v-if="showShopBtn || totalCost < 1" class="image-container">
       <f7-row>
         <f7-col>
           <div
@@ -10,7 +10,7 @@
         </f7-col>
       </f7-row>
     </div>
-    <div v-if="!showShopBtn">
+    <div v-if="!showShopBtn && totalCost > 0">
       <div class="list media-list">
         <ul>
           <li v-for="(item, index) in cart" :key="index">
@@ -39,7 +39,7 @@
         </ul>
       </div>
     </div>
-    <f7-block v-if="!showShopBtn">
+    <f7-block v-if="!showShopBtn && totalCost > 0">
       <p class="checkout-buttons">
         <f7-button fill large color="red" sheet-open=".demo-sheet-swipe-to-step">Check Out</f7-button>
         <f7-button fill large color="green" @click="StartShopping">Continue</f7-button>
@@ -90,7 +90,7 @@
 import { mapState, mapGetters } from "vuex";
 export default {
   data: () => ({
-    showShopBtn: false,
+    showShopBtn: true,
     scannerOptions: {
       preferFrontCamera: false,
       showFlipCameraButton: true,
@@ -164,7 +164,7 @@ export default {
   computed: {
     ...mapState(["cart"]),
     ...mapGetters(["totalCost"])
-  }
+  },
 };
 </script>
 
